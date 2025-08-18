@@ -1,0 +1,21 @@
+{
+  "title": "LIPAC-MD: Lipid-Protein Analysis with Causal Inference for Molecular Dynamics",
+  "description": "A Python package for comprehensive analysis of lipid-protein interactions from molecular dynamics simulations with integrated causal inference capabilities.",
+  "creators": [
+    {
+      "name": "Sato, Takeshi",
+      "affiliation": "Kyoto Pharmaceutical University",
+      "orcid": "0009-0006-9156-8655"
+    }
+  ],
+  "license": "MIT",
+  "keywords": [
+    "molecular dynamics",
+    "lipid-protein interactions",
+    "causal inference",
+    "membrane biology",
+    "computational biophysics"
+  ],
+  "upload_type": "software",
+  "access_right": "open"
+}
