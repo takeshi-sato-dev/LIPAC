@@ -1,0 +1,32 @@
+===== Target Lipid Effects on Specific Lipid Types =====
+
+Lipid Type: DPSM
+  Effect Size (β): -3.036
+  95% HDI: [-4.727, -1.202]
+  Probability of negative effect: 1.000
+  Interpretation: Strong evidence that target lipid decreases contact with this lipid type.
+
+Lipid Type: DIPC
+  Effect Size (β): 1.090
+  95% HDI: [-0.800, 2.883]
+  Probability of positive effect: 0.875
+  Interpretation: Moderate evidence that target lipid increases contact with this lipid type.
+
+Lipid Type: CHOL
+  Effect Size (β): 0.969
+  95% HDI: [0.395, 1.553]
+  Probability of positive effect: 0.998
+  Interpretation: Strong evidence that target lipid increases contact with this lipid type.
+
+Lipid Type: DOPS
+  Effect Size (β): -0.000
+  95% HDI: [-0.000, 0.000]
+  Probability of negative effect: 0.495
+  Interpretation: Weak evidence for target lipid effect on this lipid type.
+
+
+===== Overall Conclusions =====
+Strong positive effects: 1 lipid types
+Strong negative effects: 1 lipid types
+
+Target lipid shows differential effects on different lipid types, suggesting specific lipid-lipid interactions that modulate protein-membrane contacts.

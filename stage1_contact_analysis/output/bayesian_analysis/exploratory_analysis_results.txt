@@ -1,0 +1,16 @@
+===== Target Lipid-Protein Interaction Exploratory Analysis =====
+
+With target lipid: 156 residues
+Without target lipid: 234 residues
+
+--- Statistical Test Results ---
+Protein-protein contact difference (with target lipid vs without): t=-6.1644, p=3.0893e-09
+Lipid-protein contact difference (with target lipid vs without): t=0.2595, p=7.9548e-01
+Ratio difference (with target lipid vs without): t=-0.0131, p=9.8959e-01
+
+--- Comparison by Target Lipid Contact Strength ---
+Strong target lipid contact: 28 residues
+Weak/no target lipid contact: 174 residues
+Protein contact difference (strong vs weak/no target lipid): t=-4.5021, p=1.0654e-04
+  Strong target lipid mean: -1.0293
+  Weak/no target lipid mean: -0.1068

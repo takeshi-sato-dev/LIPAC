@@ -738,7 +738,7 @@ def main():
     # Optional flags
     parser.add_argument('--debug', action='store_true', help='Debug mode')
     parser.add_argument('--skip-with-target-lipid', action='store_true', help='Skip analysis of system with target lipid')
-    parser.add_argument('--skip-without-target-lipid', action='store_true', help='Skip analysis of system without target lipid')
+    parser.add_argument('--skip-without-target-lipid', action='store_true', help='Skip analysis of system without target lipid (DEFAULT: False, both analyses run)')
     parser.add_argument('--skip-plots', action='store_true', help='Skip plot generation')
     parser.add_argument('--no-parallel', dest='force_parallel', action='store_false', help='Disable parallel processing')
     parser.add_argument('--frames', type=int, default=0, help='Number of frames to process (0=all)')
@@ -813,6 +813,11 @@ def main():
     print(f"  With {TARGET_LIPID}: {abs_with_target_lipid_output}")
     print(f"  Without {TARGET_LIPID}: {abs_without_target_lipid_output}")
     print(f"  Comparison results: {abs_comparison_dir}")
+
+    # Show which analyses will run
+    print(f"\nAnalyses to run:")
+    print(f"  With {TARGET_LIPID}: {'SKIP' if args.skip_with_target_lipid else 'RUN'}")
+    print(f"  Without {TARGET_LIPID}: {'SKIP' if args.skip_without_target_lipid else 'RUN'}")
     
     # Initialize dataframes
     with_target_lipid_df = None

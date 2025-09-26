@@ -343,9 +343,19 @@ def _generate_single_comparison_plot(comparison_data, output_dir, target_lipid_n
     ax.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    
-    # Save figure with specific naming
-    plot_path = os.path.join(output_dir, f'causal_effects_comparison_{plot_type}.png')
+
+    # Save as main figure if it's the contacts plot
+    if plot_type == 'contacts':
+        # Save main figure in visible location with clear name - multiple formats
+        for fmt in ['png', 'pdf', 'svg']:
+            main_fig_path = os.path.join(output_dir, '..', f'MAIN_FIGURE_lipac_causal_effects_comparison_contacts.{fmt}')
+            plt.savefig(main_fig_path, dpi=300, bbox_inches='tight', format=fmt)
+            print(f"LIPAC Main Figure saved to: {main_fig_path}")
+
+    # Save figure in supporting_data folder
+    supporting_dir = os.path.join(output_dir, 'supporting_data')
+    os.makedirs(supporting_dir, exist_ok=True)
+    plot_path = os.path.join(supporting_dir, f'causal_effects_comparison_{plot_type}.png')
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     plt.savefig(plot_path.replace('.png', '.svg'), format='svg', bbox_inches='tight')
     plt.close()

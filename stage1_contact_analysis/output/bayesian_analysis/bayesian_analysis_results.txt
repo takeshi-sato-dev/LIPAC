@@ -1,0 +1,17 @@
+===== Bayesian Analysis Results =====
+
+--- Model 1: Relationship between Target Lipid Contact and Protein Contact ---
+Mean effect size (β): -0.7299
+95% HDI: [-0.9028, -0.5549]
+P(β < 0) = 1.0000
+
+--- Model 2: Relationship between Target Lipid Contact and Lipid Contact ---
+Mean effect size (β): 0.8051
+95% HDI: [0.6228, 0.9865]
+P(β > 0) = 1.0000
+
+--- Effect Direction ---
+P(Protein Effect < 0 and Lipid Effect > 0) = 1.0000
+
+Conclusion: Target Lipid has a high probability of decreasing protein-protein contacts while simultaneously increasing lipid-protein contacts.
+This result suggests that Target Lipid inhibits protein dimer formation through a competitive binding mechanism.

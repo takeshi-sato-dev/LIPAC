@@ -1,0 +1,28 @@
+===== Hierarchical Bayesian Model Results =====
+
+--- Global Effect ---
+Global Target Lipid effect (μ_β): -0.7764
+95% HDI: [-2.0121, 0.5524]
+P(μ_β < 0) = 0.8835
+
+--- Protein-Specific Effects ---
+Protein_4:
+  Target Lipid effect (β): -0.7884
+  95% HDI: [-0.9705, -0.6052]
+  P(β < 0) = 1.0000
+
+Protein_3:
+  Target Lipid effect (β): -0.3444
+  95% HDI: [-2.4300, 1.8860]
+  P(β < 0) = 0.6350
+
+Protein_1:
+  Target Lipid effect (β): -3.6475
+  95% HDI: [-5.0947, -2.1353]
+  P(β < 0) = 1.0000
+
+Protein_2:
+  Target Lipid effect (β): -0.0459
+  95% HDI: [-1.0519, 0.9630]
+  P(β < 0) = 0.5321
+

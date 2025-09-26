@@ -3,7 +3,6 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16891334.svg)](https://doi.org/10.5281/zenodo.16891334)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
-[![JOSS](https://joss.theoj.org/papers/10.21105/joss.XXXXX/status.svg)](https://doi.org/10.21105/joss.XXXXX)
 
 LIPAC is a Python package for comprehensive analysis of lipid-protein interactions from molecular dynamics simulations with integrated causal inference capabilities.
 
@@ -156,7 +155,7 @@ LIPAC is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 - **Issues**: [GitHub Issues](https://github.com/takeshi-sato-dev/lipac/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/takeshi-sato-dev/lipac/discussions)
-- **Email**: takeshi.sato@example.com
+- **Email**: takeshi@mb.kyoto-phu.ac.jp
 
 ## Acknowledgments
 

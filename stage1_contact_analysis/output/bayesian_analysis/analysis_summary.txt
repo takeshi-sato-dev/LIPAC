@@ -1,0 +1,59 @@
+=====================================================
+        Target Lipid-Protein Interaction Analysis - Summary Report        
+=====================================================
+
+Generated: 2025-09-26 20:41:56
+
+1. Key Findings from Exploratory Analysis
+------------------------
+* Protein-protein contact difference (with target lipid vs without): t=-6.1644, p=3.0893e-09
+* Lipid-protein contact difference (with target lipid vs without): t=0.2595, p=7.9548e-01
+* Ratio difference (with target lipid vs without): t=-0.0131, p=9.8959e-01
+
+Effects by Target Lipid Contact Strength:
+* Protein contact difference (strong vs weak/no target lipid): t=-4.5021, p=1.0654e-04
+* Strong target lipid mean: -1.0293
+* Weak/no target lipid mean: -0.1068
+
+2. Key Findings from Bayesian Regression Analysis
+------------------------------
+Protein Contact Model:
+* Mean effect size (β): -0.7299
+* 95% HDI: [-0.9028, -0.5549]
+* P(β < 0) = 1.0000
+* Mean effect size (β): 0.8051
+* 95% HDI: [0.6228, 0.9865]
+
+Lipid Contact Model:
+* Mean effect size (β): 0.8051
+* 95% HDI: [0.6228, 0.9865]
+* P(β > 0) = 1.0000
+
+Effect Direction:
+* P(Protein Effect < 0 and Lipid Effect > 0) = 1.0000
+
+Conclusion:
+* This result suggests that Target Lipid inhibits protein dimer formation through a competitive binding mechanism.
+
+3. Key Findings from Hierarchical Bayesian Model
+--------------------------------
+Global Effect:
+* 95% HDI: [-2.0121, 0.5524]
+* P(μ_β < 0) = 0.8835
+* 95% HDI: [-0.9705, -0.6052]
+* 95% HDI: [-2.4300, 1.8860]
+* 95% HDI: [-5.0947, -2.1353]
+* 95% HDI: [-1.0519, 0.9630]
+
+Protein-Specific Effect Summary:
+* Target Lipid effect (β) -0.7884: Probability of negative GM3 effect = 1.000
+* Target Lipid effect (β) -3.6475: Probability of negative GM3 effect = 1.000
+
+4. Overall Conclusion
+------------
+This result suggests that Target Lipid inhibits protein dimer formation through a competitive binding mechanism.
+
+=====================================================
+Note: This summary report is automatically generated. For detailed results,
+please refer to the individual analysis files.
+=====================================================
