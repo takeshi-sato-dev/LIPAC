@@ -108,7 +108,7 @@ LIPAC has been benchmarked on systems ranging from single transmembrane helices 
 
 **Software**: The LIPAC package is available on GitHub at https://github.com/takeshi-sato-dev/LIPAC and archived on Zenodo: https://doi.org/10.5281/zenodo.16891334
 
-**Test Data**: Complete test datasets including MD simulation trajectories are available on Zenodo: https://doi.org/10.5281/zenodo.16891479
+**Test Data**: Complete test datasets including MD simulation trajectories are available on Zenodo: https://doi.org/10.5281/zenodo.17211644
 
 # Acknowledgements
 

@@ -43,8 +43,8 @@ abstract: >
 references:
   - type: dataset
     title: "LIPAC Test Dataset - Transmembrane Peptide MD Simulation Trajectories"
-    doi: 10.5281/zenodo.16891479
-    url: "https://doi.org/10.5281/zenodo.16891479"
+    doi: 10.5281/zenodo.17211644
+    url: "https://doi.org/10.5281/zenodo.17211644"
 =======
   into competitive binding mechanisms at membrane interfaces.
 >>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5

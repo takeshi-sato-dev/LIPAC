@@ -42,7 +42,7 @@ pip install -e .
 
 LIPAC includes sample datasets for testing and demonstration purposes. Download the test data from Zenodo:
 
-[![Test Data DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16891334.svg)](https://doi.org/10.5281/zenodo.16891334)
+[![Test Data DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17211644.svg)](https://doi.org/10.5281/zenodo.17211644)
 
 ### Test Dataset Contents
 
@@ -57,11 +57,11 @@ The test dataset includes:
 # Create test directory
 mkdir test
 
-# Download test data from Zenodo (replace with actual download links)
-wget -O test/test_system_with_mediator.psf "ZENODO_DOWNLOAD_LINK"
-wget -O test/test_system_without_mediator.psf "ZENODO_DOWNLOAD_LINK"
-wget -O test/test_trajectory_with_mediator.xtc "ZENODO_DOWNLOAD_LINK"
-wget -O test/test_trajectory_without_mediator.xtc "ZENODO_DOWNLOAD_LINK"
+# Download test data from Zenodo
+wget -O test/test_system_with_mediator.psf "https://zenodo.org/records/17211644/files/test_system_with_mediator.psf"
+wget -O test/test_system_without_mediator.psf "https://zenodo.org/records/17211644/files/test_system_without_mediator.psf"
+wget -O test/test_trajectory_with_mediator.xtc "https://zenodo.org/records/17211644/files/test_trajectory_with_mediator.xtc"
+wget -O test/test_trajectory_without_mediator.xtc "https://zenodo.org/records/17211644/files/test_trajectory_without_mediator.xtc"
 ```
 
 Or use the provided download script:
@@ -156,7 +156,7 @@ Example trajectories and analysis scripts are available in the `examples/` direc
 - `examples/complex_membrane/`: Transmembrane peptide in complex lipid membrane with GM3
 - `examples/benchmark/`: Performance benchmark scripts
 
-**Test Data**: Complete test datasets including MD trajectories and expected outputs are available on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16891479.svg)](https://doi.org/10.5281/zenodo.16891479)
+**Test Data**: Complete test datasets including MD trajectories and expected outputs are available on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17211644.svg)](https://doi.org/10.5281/zenodo.17211644)
 
 ## Citation
 
