@@ -3,10 +3,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16891334.svg)](https://doi.org/10.5281/zenodo.16891334)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
-<<<<<<< HEAD
-=======
 [![JOSS](https://joss.theoj.org/papers/10.21105/joss.XXXXX/status.svg)](https://doi.org/10.21105/joss.XXXXX)
->>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
 
 LIPAC is a Python package for comprehensive analysis of lipid-protein interactions from molecular dynamics simulations with integrated causal inference capabilities.
 
@@ -40,6 +37,37 @@ pip install -e .
 - Matplotlib ≥ 3.3.0
 - Pandas ≥ 1.3.0
 - Seaborn ≥ 0.11.0
+
+## Test Data
+
+LIPAC includes sample datasets for testing and demonstration purposes. Download the test data from Zenodo:
+
+[![Test Data DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16891334.svg)](https://doi.org/10.5281/zenodo.16891334)
+
+### Test Dataset Contents
+
+The test dataset includes:
+- **`test_system_with_mediator.psf/xtc`**: System containing target lipid (DPG3/GM3) that prevents protein dimerization
+- **`test_system_without_mediator.psf/xtc`**: System without target lipid, allowing protein dimerization
+- Sample trajectories for demonstrating causal inference analysis
+
+### Download and Setup
+
+```bash
+# Create test directory
+mkdir test
+
+# Download test data from Zenodo (replace with actual download links)
+wget -O test/test_system_with_mediator.psf "ZENODO_DOWNLOAD_LINK"
+wget -O test/test_system_without_mediator.psf "ZENODO_DOWNLOAD_LINK"
+wget -O test/test_trajectory_with_mediator.xtc "ZENODO_DOWNLOAD_LINK"
+wget -O test/test_trajectory_without_mediator.xtc "ZENODO_DOWNLOAD_LINK"
+```
+
+Or use the provided download script:
+```bash
+python scripts/download_test_data.py
+```
 
 ## Quick Start
 
@@ -159,11 +187,7 @@ LIPAC is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 - **Issues**: [GitHub Issues](https://github.com/takeshi-sato-dev/lipac/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/takeshi-sato-dev/lipac/discussions)
-<<<<<<< HEAD
 - **Email**: takeshi@mb.kyoto-phu.ac.jp
-=======
-- **Email**: takeshi.sato@example.com
->>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
 
 ## Acknowledgments
 
