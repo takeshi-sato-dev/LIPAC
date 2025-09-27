@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "title": "LIPAC-MD: Lipid-Protein Analysis with Causal Inference for Molecular Dynamics",
+=======
+  "title": "LIPAC: Lipid-Protein Analysis with Causal Inference",
+>>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
   "description": "A Python package for comprehensive analysis of lipid-protein interactions from molecular dynamics simulations with integrated causal inference capabilities.",
   "creators": [
     {

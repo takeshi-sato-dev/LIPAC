@@ -209,6 +209,12 @@ def perform_causal_bayesian_analysis(causal_data, output_dir, target_lipid_name=
     # Save summary
     _save_causal_summary(results, causal_dir, target_lipid_name)
     
+<<<<<<< HEAD
+=======
+    # Save enhanced outputs (detailed CSV, traces, diagnostics)
+    _save_enhanced_causal_outputs(results, causal_dir, target_lipid_name)
+    
+>>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
     return results
 
 
@@ -343,6 +349,7 @@ def _generate_single_comparison_plot(comparison_data, output_dir, target_lipid_n
     ax.grid(True, alpha=0.3)
     
     plt.tight_layout()
+<<<<<<< HEAD
 
     # Save as main figure if it's the contacts plot
     if plot_type == 'contacts':
@@ -356,6 +363,11 @@ def _generate_single_comparison_plot(comparison_data, output_dir, target_lipid_n
     supporting_dir = os.path.join(output_dir, 'supporting_data')
     os.makedirs(supporting_dir, exist_ok=True)
     plot_path = os.path.join(supporting_dir, f'causal_effects_comparison_{plot_type}.png')
+=======
+    
+    # Save figure with specific naming
+    plot_path = os.path.join(output_dir, f'causal_effects_comparison_{plot_type}.png')
+>>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     plt.savefig(plot_path.replace('.png', '.svg'), format='svg', bbox_inches='tight')
     plt.close()
@@ -450,8 +462,13 @@ def _generate_causal_bar_chart(results, output_dir, target_lipid_name='TARGET_LI
     bars = ax.barh(y_pos, effects, color=colors, alpha=0.7, edgecolor='black')
     
     # Add error bars (confidence intervals)
+<<<<<<< HEAD
     xerr_lower = [e - c_l for e, c_l in zip(effects, ci_lower)]
     xerr_upper = [c_u - e for e, c_u in zip(ci_upper, effects)]
+=======
+    xerr_lower = [max(0, e - c_l) for e, c_l in zip(effects, ci_lower)]
+    xerr_upper = [max(0, c_u - e) for e, c_u in zip(ci_upper, effects)]
+>>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
     ax.errorbar(effects, y_pos, xerr=[xerr_lower, xerr_upper], 
                 fmt='none', color='black', capsize=3, capthick=1)
     
@@ -484,4 +501,148 @@ def _generate_causal_bar_chart(results, output_dir, target_lipid_name='TARGET_LI
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     plt.savefig(plot_path.replace('.png', '.svg'), format='svg', bbox_inches='tight')
     plt.close()
+<<<<<<< HEAD
     print(f"Causal effects bar chart saved: {plot_path} and {plot_path.replace('.png', '.svg')}")
+=======
+    print(f"Causal effects bar chart saved: {plot_path} and {plot_path.replace('.png', '.svg')}")
+
+
+def _save_enhanced_causal_outputs(results, output_dir, target_lipid_name='TARGET_LIPID'):
+    """Save comprehensive causal analysis outputs including traces and diagnostics"""
+    
+    # Save detailed CSV with all results
+    csv_data = []
+    for protein_name, protein_results in results.items():
+        for lipid_name, res in protein_results.items():
+            csv_data.append({
+                'protein': protein_name,
+                'lipid': lipid_name,
+                'effect_mean': res['effect_mean'],
+                'effect_std': res['effect_std'],
+                'ci_lower': res['ci_95'][0],
+                'ci_upper': res['ci_95'][1],
+                'prob_positive': res['prob_positive'],
+                'prob_negative': res['prob_negative'],
+                'avg_with_target': res['avg_with_target_lipid'],
+                'avg_without_target': res['avg_without_target_lipid'],
+                'n_with_target': res['n_with_target_lipid'],
+                'n_without_target': res['n_without_target_lipid'],
+                'bayes_factor_positive': res['prob_positive'] / (1 - res['prob_positive']) if res['prob_positive'] < 1 else np.inf,
+                'bayes_factor_negative': res['prob_negative'] / (1 - res['prob_negative']) if res['prob_negative'] < 1 else np.inf,
+                'effect_size_cohen_d': _calculate_effect_size(res),
+                'significance_level': _determine_significance(res)
+            })
+    
+    if csv_data:
+        csv_df = pd.DataFrame(csv_data)
+        csv_path = os.path.join(output_dir, 'causal_effects_detailed.csv')
+        csv_df.to_csv(csv_path, index=False)
+        print(f"Detailed causal effects CSV saved to: {csv_path}")
+    
+    # Save trace objects and diagnostics for each protein
+    for protein_name, protein_results in results.items():
+        protein_trace_dir = os.path.join(output_dir, 'traces', protein_name)
+        os.makedirs(protein_trace_dir, exist_ok=True)
+        
+        for lipid_name, res in protein_results.items():
+            if 'trace' in res:
+                # Save trace as NetCDF
+                trace_path = os.path.join(protein_trace_dir, f'{lipid_name}_trace.nc')
+                res['trace'].to_netcdf(trace_path)
+                print(f"Trace saved: {trace_path}")
+                
+                # Generate and save diagnostics
+                _save_trace_diagnostics(res['trace'], protein_trace_dir, lipid_name, target_lipid_name)
+
+
+def _calculate_effect_size(results):
+    """Calculate Cohen's d effect size"""
+    avg_with = results['avg_with_target_lipid']
+    avg_without = results['avg_without_target_lipid']
+    
+    if np.isnan(avg_with) or np.isnan(avg_without):
+        return np.nan
+    
+    # Use effect standard deviation as pooled standard deviation estimate
+    pooled_std = results['effect_std']
+    if pooled_std == 0:
+        return np.nan
+    
+    cohen_d = (avg_with - avg_without) / pooled_std
+    return cohen_d
+
+
+def _determine_significance(results):
+    """Determine significance level based on probability"""
+    prob_pos = results['prob_positive']
+    prob_neg = results['prob_negative']
+    
+    if prob_pos > 0.99 or prob_neg > 0.99:
+        return 'very_strong'
+    elif prob_pos > 0.95 or prob_neg > 0.95:
+        return 'strong'
+    elif prob_pos > 0.8 or prob_neg > 0.8:
+        return 'moderate'
+    elif prob_pos > 0.6 or prob_neg > 0.6:
+        return 'weak'
+    else:
+        return 'none'
+
+
+def _save_trace_diagnostics(trace, output_dir, lipid_name, target_lipid_name):
+    """Save comprehensive trace diagnostics"""
+    
+    # R-hat (convergence diagnostic)
+    rhat = az.rhat(trace)
+    
+    # Effective sample size
+    ess = az.ess(trace)
+    
+    # MCMC standard error
+    mcse = az.mcse(trace)
+    
+    # Save diagnostics to CSV
+    diagnostics_data = []
+    for param in ['alpha', 'beta_target_lipid', 'sigma']:
+        if param in rhat:
+            diagnostics_data.append({
+                'parameter': param,
+                'rhat': float(rhat[param].values) if hasattr(rhat[param], 'values') else float(rhat[param]),
+                'ess_bulk': float(ess[param].values) if hasattr(ess[param], 'values') else float(ess[param]),
+                'mcse': float(mcse[param].values) if hasattr(mcse[param], 'values') else float(mcse[param])
+            })
+    
+    if diagnostics_data:
+        diag_df = pd.DataFrame(diagnostics_data)
+        diag_path = os.path.join(output_dir, f'{lipid_name}_diagnostics.csv')
+        diag_df.to_csv(diag_path, index=False)
+        print(f"Diagnostics saved: {diag_path}")
+    
+    # Generate trace plots
+    try:
+        fig, axes = plt.subplots(3, 2, figsize=(12, 10))
+        az.plot_trace(trace, var_names=['alpha', 'beta_target_lipid', 'sigma'], axes=axes)
+        plt.suptitle(f'{target_lipid_name} Effect on {lipid_name} - Trace Plots')
+        plt.tight_layout()
+        
+        trace_plot_path = os.path.join(output_dir, f'{lipid_name}_trace_plot.png')
+        plt.savefig(trace_plot_path, dpi=300, bbox_inches='tight')
+        plt.close()
+        print(f"Trace plot saved: {trace_plot_path}")
+    except Exception as e:
+        print(f"Warning: Could not generate trace plot for {lipid_name}: {e}")
+    
+    # Generate autocorrelation plot
+    try:
+        fig, ax = plt.subplots(figsize=(10, 6))
+        az.plot_autocorr(trace, var_names=['beta_target_lipid'], ax=ax)
+        plt.title(f'{target_lipid_name} Effect on {lipid_name} - Autocorrelation')
+        plt.tight_layout()
+        
+        autocorr_plot_path = os.path.join(output_dir, f'{lipid_name}_autocorr.png')
+        plt.savefig(autocorr_plot_path, dpi=300, bbox_inches='tight')
+        plt.close()
+        print(f"Autocorrelation plot saved: {autocorr_plot_path}")
+    except Exception as e:
+        print(f"Warning: Could not generate autocorrelation plot for {lipid_name}: {e}")
+>>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5

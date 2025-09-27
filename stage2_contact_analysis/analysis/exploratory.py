@@ -22,15 +22,20 @@ def exploratory_analysis(combined_df, matched_df, output_dir):
     if combined_df is not None:
         # Compare protein-protein contact distribution between target lipid-present and target lipid-absent systems
         plt.figure(figsize=(10, 6))
+<<<<<<< HEAD
         try:
             sns.histplot(data=combined_df, x='protein_contact', hue='has_target_lipid', kde=True, bins=30, alpha=0.5)
         except:
             # Fallback without KDE if data causes singular matrix
             sns.histplot(data=combined_df, x='protein_contact', hue='has_target_lipid', kde=False, bins=30, alpha=0.5)
+=======
+        sns.histplot(data=combined_df, x='protein_contact', hue='has_target_lipid', kde=True, bins=30, alpha=0.5)
+>>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
         plt.title('Distribution of Protein-Protein Contacts')
         plt.xlabel('Protein-Protein Contact Frequency')
         plt.savefig(os.path.join(figures_dir, 'protein_contact_dist.png'), dpi=300)
         plt.close()
+<<<<<<< HEAD
 
         # Compare lipid-protein contact distribution between target lipid-present and target lipid-absent systems
         plt.figure(figsize=(10, 6))
@@ -39,10 +44,17 @@ def exploratory_analysis(combined_df, matched_df, output_dir):
         except:
             # Fallback without KDE if data causes singular matrix
             sns.histplot(data=combined_df, x='lipid_contact', hue='has_target_lipid', kde=False, bins=30, alpha=0.5)
+=======
+        
+        # Compare lipid-protein contact distribution between target lipid-present and target lipid-absent systems
+        plt.figure(figsize=(10, 6))
+        sns.histplot(data=combined_df, x='lipid_contact', hue='has_target_lipid', kde=True, bins=30, alpha=0.5)
+>>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
         plt.title('Distribution of Lipid-Protein Contacts')
         plt.xlabel('Lipid-Protein Contact Frequency')
         plt.savefig(os.path.join(figures_dir, 'lipid_contact_dist.png'), dpi=300)
         plt.close()
+<<<<<<< HEAD
 
         # Compare ratio distribution between target lipid-present and target lipid-absent systems
         plt.figure(figsize=(10, 6))
@@ -51,6 +63,12 @@ def exploratory_analysis(combined_df, matched_df, output_dir):
         except:
             # Fallback without KDE if data causes singular matrix
             sns.histplot(data=combined_df, x='ratio', hue='has_target_lipid', kde=False, bins=30, alpha=0.5)
+=======
+        
+        # Compare ratio distribution between target lipid-present and target lipid-absent systems
+        plt.figure(figsize=(10, 6))
+        sns.histplot(data=combined_df, x='ratio', hue='has_target_lipid', kde=True, bins=30, alpha=0.5)
+>>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
         plt.title('Distribution of Lipid-to-Protein Contact Ratio')
         plt.xlabel('Lipid-to-Protein Contact Ratio')
         plt.savefig(os.path.join(figures_dir, 'ratio_dist.png'), dpi=300)

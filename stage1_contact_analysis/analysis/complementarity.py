@@ -48,7 +48,11 @@ def analyze_contact_complementarity(protein_contact_results, lipid_contact_resul
             dimerized_pairs[pair] = True
     
     print(f"Found {len(dimerized_pairs)} dimerized protein pairs with contacts")
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
     # Process when protein-protein contacts exist
     if protein_contact_results and dimerized_pairs:
         # Process each protein pair

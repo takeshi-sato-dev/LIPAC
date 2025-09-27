@@ -5,7 +5,11 @@ Main execution script
 
 Author: Takeshi Sato, PhD
 Kyoto Pharmaceutical University
+<<<<<<< HEAD
 2025
+=======
+2024
+>>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
 """
 
 import os
