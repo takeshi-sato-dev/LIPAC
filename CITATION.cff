@@ -3,27 +3,15 @@ message: "If you use this software, please cite it as below."
 authors:
   - family-names: "Sato"
     given-names: "Takeshi"
-<<<<<<< HEAD
     orcid: "https://orcid.org/0009-0006-9156-8655"
     email: "sato@kyoto-phu.ac.jp"
     affiliation: "Kyoto Pharmaceutical University"
 title: "LIPAC: Lipid-Protein Analysis with Causal Inference"
 version: 1.0.0
-doi: 10.5281/zenodo.16891334
+doi: 10.5281/zenodo.17211665
 date-released: 2025-08-13
 url: "https://github.com/takeshi-sato-dev/LIPAC"
 repository-code: "https://github.com/takeshi-sato-dev/LIPAC"
-=======
-    orcid: "https://orcid.org/0000-0000-0000-0000"
-    email: "sato@kyoto-phu.ac.jp"
-    affiliation: "Kyoto Pharmaceutical University"
-title: "LIPAC: Lipid-Protein Interaction Analysis and Characterization"
-version: 1.0.0
-doi: 10.21105/joss.XXXXX
-date-released: 2025-08-13
-url: "https://github.com/takeshi-sato/lipac"
-repository-code: "https://github.com/takeshi-sato/lipac"
->>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
 license: MIT
 type: software
 keywords:
@@ -38,13 +26,9 @@ abstract: >
   competitive lipid-protein interactions from molecular dynamics
   simulations. It quantifies how various membrane lipids modulate
   protein-protein interactions and provides statistical insights
-<<<<<<< HEAD
   into competitive binding mechanisms at membrane interfaces.
 references:
   - type: dataset
     title: "LIPAC Test Dataset - Transmembrane Peptide MD Simulation Trajectories"
     doi: 10.5281/zenodo.17211644
     url: "https://doi.org/10.5281/zenodo.17211644"
-=======
-  into competitive binding mechanisms at membrane interfaces.
->>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
