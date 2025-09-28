@@ -209,12 +209,9 @@ def perform_causal_bayesian_analysis(causal_data, output_dir, target_lipid_name=
     # Save summary
     _save_causal_summary(results, causal_dir, target_lipid_name)
     
-<<<<<<< HEAD
-=======
     # Save enhanced outputs (detailed CSV, traces, diagnostics)
     _save_enhanced_causal_outputs(results, causal_dir, target_lipid_name)
-    
->>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
+
     return results
 
 
@@ -349,25 +346,9 @@ def _generate_single_comparison_plot(comparison_data, output_dir, target_lipid_n
     ax.grid(True, alpha=0.3)
     
     plt.tight_layout()
-<<<<<<< HEAD
 
-    # Save as main figure if it's the contacts plot
-    if plot_type == 'contacts':
-        # Save main figure in visible location with clear name - multiple formats
-        for fmt in ['png', 'pdf', 'svg']:
-            main_fig_path = os.path.join(output_dir, '..', f'MAIN_FIGURE_lipac_causal_effects_comparison_contacts.{fmt}')
-            plt.savefig(main_fig_path, dpi=300, bbox_inches='tight', format=fmt)
-            print(f"LIPAC Main Figure saved to: {main_fig_path}")
-
-    # Save figure in supporting_data folder
-    supporting_dir = os.path.join(output_dir, 'supporting_data')
-    os.makedirs(supporting_dir, exist_ok=True)
-    plot_path = os.path.join(supporting_dir, f'causal_effects_comparison_{plot_type}.png')
-=======
-    
     # Save figure with specific naming
     plot_path = os.path.join(output_dir, f'causal_effects_comparison_{plot_type}.png')
->>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     plt.savefig(plot_path.replace('.png', '.svg'), format='svg', bbox_inches='tight')
     plt.close()
@@ -462,13 +443,8 @@ def _generate_causal_bar_chart(results, output_dir, target_lipid_name='TARGET_LI
     bars = ax.barh(y_pos, effects, color=colors, alpha=0.7, edgecolor='black')
     
     # Add error bars (confidence intervals)
-<<<<<<< HEAD
-    xerr_lower = [e - c_l for e, c_l in zip(effects, ci_lower)]
-    xerr_upper = [c_u - e for e, c_u in zip(ci_upper, effects)]
-=======
     xerr_lower = [max(0, e - c_l) for e, c_l in zip(effects, ci_lower)]
     xerr_upper = [max(0, c_u - e) for e, c_u in zip(ci_upper, effects)]
->>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
     ax.errorbar(effects, y_pos, xerr=[xerr_lower, xerr_upper], 
                 fmt='none', color='black', capsize=3, capthick=1)
     
@@ -501,9 +477,6 @@ def _generate_causal_bar_chart(results, output_dir, target_lipid_name='TARGET_LI
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     plt.savefig(plot_path.replace('.png', '.svg'), format='svg', bbox_inches='tight')
     plt.close()
-<<<<<<< HEAD
-    print(f"Causal effects bar chart saved: {plot_path} and {plot_path.replace('.png', '.svg')}")
-=======
     print(f"Causal effects bar chart saved: {plot_path} and {plot_path.replace('.png', '.svg')}")
 
 
@@ -645,4 +618,3 @@ def _save_trace_diagnostics(trace, output_dir, lipid_name, target_lipid_name):
         print(f"Autocorrelation plot saved: {autocorr_plot_path}")
     except Exception as e:
         print(f"Warning: Could not generate autocorrelation plot for {lipid_name}: {e}")
->>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5

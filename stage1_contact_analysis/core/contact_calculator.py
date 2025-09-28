@@ -40,21 +40,15 @@ def calculate_protein_protein_contacts(protein1, protein2, box, cutoff=PROTEIN_C
             diff[dim] += box[dim]
     
     com_dist = np.sqrt(np.sum(diff * diff))
-<<<<<<< HEAD
 
     # Skip calculation if COMs are too far apart
-    if com_dist > 30.0:  # If farther than 30Å, assume no contact (same as mirage)
-=======
-    
-    # Skip calculation if COMs are too far apart
     if com_dist > 30.0:  # If farther than 30Å, assume no contact
->>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
         print(f"Proteins too far apart: {com_dist:.2f}Å > 30Å, skipping contact calculation")
-        
+
         # Store converted residue IDs
         residue_ids1 = [res.resid + RESIDUE_OFFSET for res in protein1.residues]
         residue_ids2 = [res.resid + RESIDUE_OFFSET for res in protein2.residues]
-        
+
         return protein1_contacts, protein2_contacts, contact_matrix, min_distances1, min_distances2, residue_ids1, residue_ids2
     
     print(f"Calculating protein-protein contacts between {len(protein1.residues)} and {len(protein2.residues)} residues")
@@ -362,11 +356,6 @@ def calculate_protein_com_distances(universe, proteins):
     
     print("Calculating protein-protein COM distances and TM helix interactions...")
     box = universe.dimensions[:3]
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
     # Calculate COM for each protein
     protein_coms = {}
     for protein_name, protein in proteins.items():
@@ -414,18 +403,11 @@ def calculate_protein_com_distances(universe, proteins):
                     )
                     
                     if not has_tm_interactions:
-<<<<<<< HEAD
-                        print(f"  Proteins close but no TM interactions: {protein1_name}-{protein2_name} (distance: {dist:.2f} Å)")
-                        continue
-
-                # Record only pairs passing above conditions
-=======
                         print(f"  {protein1_name}-{protein2_name}: distance {dist:.2f} Å (no TM interactions)")
                     else:
                         print(f"  {protein1_name}-{protein2_name}: distance {dist:.2f} Å (with TM interactions)")
-                
+
                 # Record the pair
->>>>>>> 4880c9ee1958ba009c2a2f29d635256470a257d5
                 pair_name = f"{protein1_name}-{protein2_name}"
                 close_pairs[pair_name] = dist
                 print(f"  Found close pair: {pair_name}, distance: {dist:.2f} Å")
