@@ -74,7 +74,7 @@ def generate_summary_report(output_dir):
                     summary_file.write("Protein Contact Model:\n")
                     lines = content.split('\n')
                     for i, line in enumerate(lines):
-                        if "Mean effect size (β)" in line:
+                        if "Mean effect size (β)" in line and "Model 1" in content[:content.find(line)]:
                             summary_file.write(f"* {line.strip()}\n")
                         if "95% HDI" in line and "Model 1" in content[:content.find(line)]:
                             summary_file.write(f"* {line.strip()}\n")
