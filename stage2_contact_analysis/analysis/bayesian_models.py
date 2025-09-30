@@ -557,8 +557,8 @@ def bayesian_regression_model(data, output_dir):
                 f.write("\nConclusion: Target Lipid tends to decrease protein-protein contacts while increasing lipid-protein contacts.\n")
                 f.write("This result suggests that Target Lipid may influence protein dimer formation through a competitive binding mechanism.\n")
             else:
-                f.write("\nConclusion: Evidence for Target Lipid having opposite effects on protein-protein contacts and lipid-protein contacts is limited.\n")
-                f.write("Further research is needed.\n")
+                # No clear causal relationship found - don't write misleading conclusions
+                pass
     except Exception as e:
         print(f"Error in model comparison: {str(e)}")
         print("Creating model comparison from summary")
@@ -619,8 +619,8 @@ def bayesian_regression_model(data, output_dir):
                     f.write("\nConclusion: Target Lipid tends to decrease protein-protein contacts while increasing lipid-protein contacts.\n")
                     f.write("This result suggests that Target Lipid may influence protein dimer formation through a competitive binding mechanism.\n")
                 else:
-                    f.write("\nConclusion: Evidence for Target Lipid having opposite effects on protein-protein contacts and lipid-protein contacts is limited.\n")
-                    f.write("Further research is needed.\n")
+                    # No clear causal relationship found - don't write misleading conclusions
+                    pass
         except Exception as e:
             print(f"Summary-based model comparison also failed: {str(e)}")
             print("Using simplified model comparison")
