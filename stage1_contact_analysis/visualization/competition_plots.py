@@ -510,6 +510,11 @@ def plot_protein_model_effect_simple(with_target_df, without_target_df, output_d
         output_path = os.path.join(output_dir, 'protein_model_effect_simple.png')
         plt.savefig(output_path, dpi=300)
         plt.savefig(output_path.replace('.png', '.svg'), dpi=300)
+
+        # Also save as MAIN file for easy identification
+        main_output_path = os.path.join(output_dir, '..', 'MAIN_protein_contact_causal_effect.png')
+        plt.savefig(main_output_path, dpi=300)
+
         plt.close()
         
         print(f"protein_model_effect_simple plot saved to: {output_path}")

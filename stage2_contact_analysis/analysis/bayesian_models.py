@@ -429,6 +429,13 @@ def bayesian_regression_model(data, output_dir):
             plt.grid(True, alpha=0.3)
             plt.savefig(os.path.join(model_dir, 'lipid_model_effect_simple.png'), dpi=300)
             plt.savefig(os.path.join(model_dir, 'lipid_model_effect_simple.svg'), dpi=300)
+
+            # Also save as MAIN file for easy identification
+            main_output_path = os.path.join(model_dir, '..', 'MAIN_lipid_contact_causal_effect.png')
+            plt.savefig(main_output_path, dpi=300)
+
+            print(f"MAIN lipid contact causal effect plot saved to: {main_output_path}")
+
             plt.close()
         except Exception as e:
             print(f"Error in regression line plot: {str(e)}")

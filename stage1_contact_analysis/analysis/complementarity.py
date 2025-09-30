@@ -27,18 +27,21 @@ def analyze_contact_complementarity(protein_contact_results, lipid_contact_resul
     
     # Initialize results
     results = []
-    
+
     # Maximum ratio value cap and minimum denominator
     MAX_RATIO = 10.0
     MIN_DENOMINATOR = 0.1
-    
+
     # Get all protein names
     all_proteins = set()
     for lipid_type in lipid_contact_results:
         all_proteins.update(lipid_contact_results[lipid_type].keys())
-    
+
     # Track processed proteins
     processed_proteins = set()
+
+    # Track ALL processed residues globally to prevent duplicates
+    global_processed_residues = set()
     
     # Process only dimerized protein pairs
     dimerized_pairs = {}
@@ -78,6 +81,12 @@ def analyze_contact_complementarity(protein_contact_results, lipid_contact_resul
                 # Process each residue in protein1
                 for res_idx, pp_contact in enumerate(pp_contacts_1):
                     res_id = residue_ids1[res_idx]
+
+                    # Skip if this residue was already processed
+                    residue_key = (protein1_name, res_id)
+                    if residue_key in global_processed_residues:
+                        continue
+                    global_processed_residues.add(residue_key)
                     
                     # Get minimum distance information
                     min_distance = 999.0
@@ -140,6 +149,12 @@ def analyze_contact_complementarity(protein_contact_results, lipid_contact_resul
                 # Process each residue in protein2 similarly
                 for res_idx, pp_contact in enumerate(pp_contacts_2):
                     res_id = residue_ids2[res_idx]
+
+                    # Skip if this residue was already processed
+                    residue_key = (protein2_name, res_id)
+                    if residue_key in global_processed_residues:
+                        continue
+                    global_processed_residues.add(residue_key)
                     
                     # Get minimum distance information
                     min_distance = 999.0
@@ -217,8 +232,14 @@ def analyze_contact_complementarity(protein_contact_results, lipid_contact_resul
                 
                 for res_idx, lipid_contact in enumerate(contacts):
                     res_id = residue_ids[res_idx]
-                    
-                    # Skip already processed residues
+
+                    # Skip already processed residues (using global tracker)
+                    residue_key = (protein_name, res_id)
+                    if residue_key in global_processed_residues:
+                        continue
+                    global_processed_residues.add(residue_key)
+
+                    # Also track locally for backward compatibility
                     res_key = f"{protein_name}_{res_id}"
                     if res_key in processed_lipid_residues:
                         continue
@@ -329,7 +350,18 @@ def analyze_contact_complementarity(protein_contact_results, lipid_contact_resul
     # Convert to DataFrame
     if results:
         df = pd.DataFrame(results)
-        
+
+        # Check for duplicates and report
+        duplicates = df.duplicated(subset=['protein', 'residue'], keep=False)
+        n_duplicates = duplicates.sum()
+        if n_duplicates > 0:
+            print(f"WARNING: Found {n_duplicates} duplicate protein-residue pairs after processing")
+            duplicate_examples = df[duplicates].head(10)
+            print("Examples of duplicates:")
+            print(duplicate_examples[['protein', 'residue', 'protein_pair']])
+        else:
+            print(f"SUCCESS: No duplicate protein-residue pairs found. Total entries: {len(df)}")
+
         # Debug output: Target lipid contact data confirmation
         if f'{TARGET_LIPID}_contact' in df.columns:
             target_max = df[f'{TARGET_LIPID}_contact'].max()
