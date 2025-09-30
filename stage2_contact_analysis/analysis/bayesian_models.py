@@ -190,6 +190,11 @@ def bayesian_regression_model(data, output_dir):
             plt.grid(True, alpha=0.3)
             plt.savefig(os.path.join(model_dir, 'protein_model_regression_simple.png'), dpi=300)
             plt.savefig(os.path.join(model_dir, 'protein_model_regression_simple.svg'), dpi=300)
+
+            # Also save as MAIN file for easy identification
+            main_output_path = os.path.join(output_dir, 'MAIN_protein_regression_causal_effect.png')
+            plt.savefig(main_output_path, dpi=300)
+
             plt.close()
             
             # Effect size posterior distribution
@@ -246,6 +251,11 @@ def bayesian_regression_model(data, output_dir):
                 plt.grid(True, alpha=0.3)
                 plt.savefig(os.path.join(model_dir, 'protein_model_regression_simple.png'), dpi=300)
                 plt.savefig(os.path.join(model_dir, 'protein_model_regression_simple.svg'), dpi=300)
+
+                # Also save as MAIN file for easy identification
+                main_output_path = os.path.join(output_dir, 'MAIN_protein_regression_causal_effect.png')
+                plt.savefig(main_output_path, dpi=300)
+
                 plt.close()
                 
                 # Save effect size information to text file
