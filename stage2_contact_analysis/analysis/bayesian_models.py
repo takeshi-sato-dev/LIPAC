@@ -445,10 +445,13 @@ def bayesian_regression_model(data, output_dir):
             plt.savefig(os.path.join(model_dir, 'lipid_model_effect_simple.svg'), dpi=300)
 
             # Also save as MAIN file for easy identification
-            main_output_path = os.path.join(model_dir, '..', 'MAIN_lipid_contact_causal_effect.png')
-            plt.savefig(main_output_path, dpi=300)
+            main_output_path_png = os.path.join(model_dir, '..', 'MAIN_lipid_contact_causal_effect.png')
+            main_output_path_svg = os.path.join(model_dir, '..', 'MAIN_lipid_contact_causal_effect.svg')
+            plt.savefig(main_output_path_png, dpi=300)
+            plt.savefig(main_output_path_svg, dpi=300)
 
-            print(f"MAIN lipid contact causal effect plot saved to: {main_output_path}")
+            print(f"MAIN lipid contact causal effect plot saved to: {main_output_path_png}")
+            print(f"MAIN lipid contact causal effect plot saved to: {main_output_path_svg}")
 
             plt.close()
         except Exception as e:
