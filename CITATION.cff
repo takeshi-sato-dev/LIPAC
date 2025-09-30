@@ -8,7 +8,7 @@ authors:
     affiliation: "Kyoto Pharmaceutical University"
 title: "LIPAC: Lipid-Protein Analysis with Causal Inference"
 version: 1.0.0
-doi: 10.5281/zenodo.17211665
+doi: 10.5281/zenodo.17231689
 date-released: 2025-08-13
 url: "https://github.com/takeshi-sato-dev/LIPAC"
 repository-code: "https://github.com/takeshi-sato-dev/LIPAC"
