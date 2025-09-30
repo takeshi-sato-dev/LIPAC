@@ -351,8 +351,17 @@ def _generate_single_comparison_plot(comparison_data, output_dir, target_lipid_n
     plot_path = os.path.join(output_dir, f'causal_effects_comparison_{plot_type}.png')
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     plt.savefig(plot_path.replace('.png', '.svg'), format='svg', bbox_inches='tight')
+
+    # Also save as MAIN file for easy identification
+    main_plot_path_png = os.path.join(output_dir, f'MAIN_causal_effects_comparison_{plot_type}.png')
+    main_plot_path_svg = os.path.join(output_dir, f'MAIN_causal_effects_comparison_{plot_type}.svg')
+    plt.savefig(main_plot_path_png, dpi=300, bbox_inches='tight')
+    plt.savefig(main_plot_path_svg, format='svg', bbox_inches='tight')
+
     plt.close()
     print(f"Comparative {plot_label} plot saved: {plot_path}")
+    print(f"MAIN comparative {plot_label} plot saved: {main_plot_path_png}")
+    print(f"MAIN comparative {plot_label} plot saved: {main_plot_path_svg}")
 
 
 def _save_causal_summary(results, output_dir, target_lipid_name='TARGET_LIPID'):
