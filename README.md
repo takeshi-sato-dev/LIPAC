@@ -1,6 +1,6 @@
 # LIPAC: Lipid-Protein Analysis with Causal Inference
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17231689.svg)](https://10.5281/zenodo.18072282)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18072282.svg)](https://10.5281/zenodo.18072282)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
 
