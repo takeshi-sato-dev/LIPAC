@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Sato"
+    given-names: "Takeshi"
+    orcid: "https://orcid.org/0009-0006-9156-8655"
+    email: "sato@kyoto-phu.ac.jp"
+    affiliation: "Kyoto Pharmaceutical University"
+title: "LIPAC: Lipid-Protein Analysis with Causal Inference"
+version: 1.0.0
+doi: 10.5281/zenodo.17231689
+date-released: 2025-08-13
+url: "https://github.com/takeshi-sato-dev/LIPAC"
+repository-code: "https://github.com/takeshi-sato-dev/LIPAC"
+license: MIT
+type: software
+keywords:
+  - molecular-dynamics
+  - lipid-protein-interactions
+  - membrane-proteins
+  - computational-biophysics
+  - bayesian-statistics
+  - python
+abstract: >
+  LIPAC is a comprehensive two-stage Python pipeline for analyzing
+  competitive lipid-protein interactions from molecular dynamics
+  simulations. It quantifies how various membrane lipids modulate
+  protein-protein interactions and provides statistical insights
+  into competitive binding mechanisms at membrane interfaces.
+references:
+  - type: dataset
+    title: "LIPAC Test Dataset - Transmembrane Peptide MD Simulation Trajectories"
+    doi: 10.5281/zenodo.17211644
+    url: "https://doi.org/10.5281/zenodo.17211644"
