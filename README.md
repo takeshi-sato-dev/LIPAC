@@ -166,12 +166,12 @@ If you use LIPAC in your research, please cite:
 @article{lipac_2025,
   title = {LIPAC: Lipid-Protein Analysis with Causal Inference for Molecular Dynamics Simulations},
   author = {Sato, Takeshi},
-  journal = {Journal of Open Source Software},
+  journal = {Journal},
   year = {2025},
   volume = {X},
   number = {XX},
   pages = {XXXX},
-  doi = {10.21105/joss.XXXXX}
+  doi = {10.21105/xxxx.XXXXX}
 }
 ```
 
