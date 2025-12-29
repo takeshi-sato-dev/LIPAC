@@ -1,9 +1,8 @@
 # LIPAC: Lipid-Protein Analysis with Causal Inference
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17231689.svg)](https://doi.org/10.5281/zenodo.17231689)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18080231.svg)](https://doi.org/10.5281/zenodo.18080231)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
-[![JOSS](https://joss.theoj.org/papers/10.21105/joss.XXXXX/status.svg)](https://doi.org/10.21105/joss.XXXXX)
+
 
 LIPAC is a Python package for comprehensive analysis of lipid-protein interactions from molecular dynamics simulations with integrated causal inference capabilities.
 
