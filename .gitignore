@@ -1,0 +1,36 @@
+# Data files
+*.xtc
+*.pdb
+*.psf
+*.dcd
+*.gro
+*.trr
+*.nc
+
+# Output directories
+stage1_contact_analysis/output/
+stage2_contact_analysis/output/
+**/output/
+**/results/
+**/data/
+
+# Temporary files
+*.pyc
+__pycache__/
+.DS_Store
+*.log
+*.tmp
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# Python
+*.egg-info/
+dist/
+build/
+*/output/
+*/output/*
