@@ -162,15 +162,15 @@ Example trajectories and analysis scripts are available in the `examples/` direc
 If you use LIPAC in your research, please cite:
 
 ```bibtex
-@article{lipac_2025,
-  title = {LIPAC: Lipid-Protein Analysis with Causal Inference for Molecular Dynamics Simulations},
+@article{lipac_2026,
+  title = {A Computational Framework for Causal Inference in Molecular Dynamics Analysis of Lipid-Protein Interactions},
   author = {Sato, Takeshi},
-  journal = {Journal of Open Source Software},
-  year = {2025},
+  journal = {Journal of Chemical Information and Modelling},
+  year = {2026},
   volume = {X},
   number = {XX},
   pages = {XXXX},
-  doi = {10.21105/joss.XXXXX}
+  doi = {10.1021/acs.jcim.5c02497}
 }
 ```
 
