@@ -197,3 +197,27 @@ We acknowledge contributions and support from Kyoto Pharmaceutical University Fu
 - [MDAnalysis](https://www.mdanalysis.org/): Trajectory analysis framework
 - [PyMC](https://www.pymc.io/): Bayesian statistical modeling
 - [FATSLiM](https://github.com/FATSLiM/fatslim): Membrane analysis tools
+
+## v2: Mixture Causal Model
+
+Bayesian mixture causal model for detecting cooperative lipid dynamics in MD simulations. When a linear model produces sign-inconsistent β values across replicates, this may reflect multimodal responses rather than insufficient sampling. The mixture model decomposes bound-state observations into two latent subpopulations—one with a direct binding effect only (β_direct) and one with an additional cooperative effect (β_direct + β_coop)—with mixing probability π estimated from the data. Automated model selection via WAIC classifies each lipid species as linear or cooperative.
+
+**Reference:** Sato, T. "Nonlinear Causal Inference for Cooperative Lipid Dynamics in Molecular Dynamics Simulations" (submitted to *J. Chem. Theory Comput.*)
+
+### Usage
+
+```bash
+python analysis/mixture_causal_analysis.py --input stage1_output.csv
+```
+
+### Recommended Workflow
+
+1. Run the linear LIPAC analysis first to identify causal effects and assess consistency across protein copies.
+2. For any lipid type where β values show inconsistent signs across copies, apply the mixture model.
+3. Classify: ΔWAIC > 2 **and** 95% CI of β_coop excludes zero → **cooperative**; otherwise → **linear**.
+4. Report π × β_coop alongside individual estimates of β_coop and π.
+5. Interpret β_direct and β_coop quantitatively only when β_coop/σ > 2.
+
+### Dependencies
+
+PyMC, ArviZ, NumPy, pandas

@@ -5,6 +5,9 @@
 *.dcd
 *.gro
 *.trr
+*.tpr
+*.npy
+*.edr
 *.nc
 
 # Output directories
