@@ -12,7 +12,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="bayesian_lipid_analysis",
-    version="1.0.0",
+    version="3.0.0",
     author="Takeshi Sato",
     author_email="your.email@example.com",  # Update with actual email
     description="Bayesian analysis of lipid-protein interactions from molecular dynamics simulations",

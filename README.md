@@ -3,6 +3,55 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18080231.svg)](https://doi.org/10.5281/zenodo.18080231)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
 
+## Notice of errors in LIPAC 1 and 2 (LIPAC 3, 29 September 2026)
+
+Stage 1 of LIPAC 1 and 2, which covers every commit up to a010a80 (9 April 2026),
+contains two errors in the calculation of lipid–protein contacts. Both are corrected in
+LIPAC 3.
+
+1. **Lipid coordinates held at the first analyzed frame.** In the parallel version of
+   Stage 1, the upper-leaflet AtomGroup selected at the first analyzed frame was passed
+   to every worker process. An AtomGroup passed to another process is pickled together
+   with the Universe it belongs to. The lipids carried the coordinates of
+   the first analyzed frame in every later frame, while the protein coordinates were
+   updated correctly. The binding state of the target lipid and every lipid contact
+   number were affected. The serial version was not affected. The worker now receives
+   the atom indices of the leaflet and selects the lipids from its own Universe.
+2. **Prescreens that discarded real contacts.** Two prescreens were applied before the
+   6 Å bead–bead criterion: a comparison of the mean height of a residue with the mean
+   height of a lipid type (15 Å), and a center-of-mass distance (14 Å). A molecule split
+   across the periodic boundary has a center of mass near the middle of the box, and
+   every contact with such a molecule was discarded. The prescreens are removed, and a
+   residue and a lipid molecule are in contact whenever any bead of one lies within
+   6 Å of any bead of the other, under the minimum image. The unique-molecule count and
+   the protein–protein contacts are calculated in the same way.
+
+The results of *J. Chem. Inf. Model.* DOI 10.1021/acs.jcim.5c02497 were produced with the
+affected parallel version, and the author has requested the retraction of that article.
+
+**Checks.** `validation/README.md` lists the checks of this version: the serial and the
+parallel paths return identical output, the contacts agree with a brute-force count on
+real trajectories, and `validation/test_exact_contacts.py` compares every contact
+function with a brute-force count on synthetic membranes whose molecules are split across
+the periodic boundary (LIPAC 2 fails this test). `stage1_fast/` adds a fast parallel
+implementation of the same contact definition for analysis at full time resolution.
+
+**Stage 2.** The Bayesian models treat every frame as an independent observation.
+Frames of a molecular dynamics trajectory are strongly correlated, and on real data a
+credible interval of a per-copy effect can exclude zero when no effect is present. In
+the same data, the mixture model beats the linear model when the binding state is
+shifted in time against the contact numbers, because the contact numbers are not
+normally distributed. `run_stage2_calibrated.py` (module
+`stage2_contact_analysis/analysis/calibration.py`) gives the classification that holds
+for correlated frames: the effect of binding is estimated with a block bootstrap over
+time blocks chosen from the autocorrelation time, and both the effect and the
+mixture-over-linear comparison are tested against binding states shifted circularly in
+time within each copy (at least 100 shifts; 200 by default). A lipid type is classified
+as linear or cooperative only when it passes these tests, and the uncalibrated rule
+(delta WAIC > 2) of the Bayesian models should not be used on its own.
+
+This repository is no longer developed.
+
 
 LIPAC is a Python package for comprehensive analysis of lipid-protein interactions from molecular dynamics simulations with integrated causal inference capabilities.
 

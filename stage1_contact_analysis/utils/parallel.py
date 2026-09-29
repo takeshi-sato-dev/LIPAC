@@ -146,6 +146,13 @@ def _frame_processor_worker(args):
         
         # Get leaflet information
         leaflet0 = selected_leaflet0  # Use passed leaflet information
+        # FIX (2026-09-29): a leaflet passed from the main process is an AtomGroup of the
+        # main-process Universe (pickled at the first analysed frame). Using it directly froze
+        # all lipid coordinates at that frame. Rebind the same atoms to this worker's Universe,
+        # which is positioned at frame_idx.
+        if leaflet0 is not None:
+            idx = leaflet0.indices if hasattr(leaflet0, 'indices') else np.asarray(leaflet0)
+            leaflet0 = universe.atoms[idx]
         
         # If no leaflet information, load or generate
         if leaflet0 is None:
@@ -439,7 +446,7 @@ def process_batch(frames, top_file, traj_file, mp_context='fork', batch_size=50,
                 contact_cutoff,  # Lipid-protein contact cutoff
                 protein_cutoff,  # Protein-protein contact cutoff
                 is_first,
-                selected_leaflet0  # Also pass selected leaflet
+                (selected_leaflet0.indices if selected_leaflet0 is not None else None)  # FIX: pass atom indices, not an AtomGroup bound to the main Universe
             ))
         
         # Execute multiprocessing

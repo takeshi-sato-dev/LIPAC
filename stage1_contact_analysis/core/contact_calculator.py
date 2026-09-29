@@ -3,313 +3,111 @@
 import numpy as np
 from ..config import RESIDUE_OFFSET, CONTACT_CUTOFF, PROTEIN_CONTACT_CUTOFF, TM_HELIX_RESID_RANGE, APPLY_RESIDUE_OFFSET
 
+from MDAnalysis.lib.distances import distance_array as _distance_array
+
+
+def _full_box(box):
+    """[lx, ly, lz, 90, 90, 90] from a box given as [lx, ly, lz] or as the full 6 values.
+    The earlier code applied the minimum image per axis, i.e. it assumed a rectangular box;
+    the same assumption is kept here."""
+    b = np.asarray(box, dtype=np.float32)
+    return np.r_[b[:3], 90.0, 90.0, 90.0].astype(np.float32)
+
+
+def _whole_com(atomgroup, box):
+    """Center of mass of an AtomGroup after making it whole across the periodic box.
+    Every atom is placed at its minimum image relative to the first atom, which is
+    exact whenever the group is smaller than half the box (true for a residue, a lipid
+    or a peptide)."""
+    pos = atomgroup.positions.astype(float)
+    b = np.asarray(box[:3], dtype=float)
+    d = pos - pos[0]
+    pos = pos[0] + d - b * np.round(d / b)
+    m = atomgroup.masses
+    return (pos * m[:, None]).sum(0) / m.sum()
+
+
+def _residue_index(atomgroup):
+    """Index (0..n_res-1) of the residue of every atom, in the order of atomgroup.residues."""
+    order = {ri: k for k, ri in enumerate(atomgroup.residues.resindices)}
+    return np.array([order[ri] for ri in atomgroup.resindices])
+
+
+def _residue_min_distance(ag1, ag2, box):
+    """Exact minimum bead-bead distance (PBC) for every residue of ag1 x every residue of ag2."""
+    D = _distance_array(ag1.positions, ag2.positions, box=_full_box(box))
+    r1 = _residue_index(ag1); r2 = _residue_index(ag2)
+    n1 = len(ag1.residues); n2 = len(ag2.residues)
+    M = np.full((n1, D.shape[1]), np.inf)
+    np.minimum.at(M, r1, D)
+    R = np.full((n1, n2), np.inf)
+    np.minimum.at(R.T, r2, M.T)
+    return R
+
 def calculate_protein_protein_contacts(protein1, protein2, box, cutoff=PROTEIN_CONTACT_CUTOFF):
-    """Calculate residue-residue contacts between two proteins with residue number conversion
-    
-    Parameters
-    ----------
-    protein1, protein2 : MDAnalysis.AtomGroup
-        Protein selections
-    box : array-like
-        Box dimensions for PBC
-    cutoff : float
-        Contact cutoff distance in Angstrom
-        
-    Returns
-    -------
-    tuple
-        Contact arrays and matrices with converted residue IDs
+    """Residue-residue contacts between two proteins.
+
+    A residue pair is in contact when any bead of one residue lies within `cutoff` of any
+    bead of the other (minimum image). All residue pairs are evaluated; the COM
+    prescreens of the earlier version, which dropped real contacts when a protein was
+    split across the periodic boundary, are removed.
+    Returns (protein1_contacts, protein2_contacts, contact_matrix, min_distances1,
+    min_distances2, residue_ids1, residue_ids2) as before; min_distances are exact.
     """
-    # Initialize contact matrices
-    protein1_contacts = np.zeros(len(protein1.residues))
-    protein2_contacts = np.zeros(len(protein2.residues))
-    min_distances1 = np.ones(len(protein1.residues)) * float('inf')
-    min_distances2 = np.ones(len(protein2.residues)) * float('inf')
-    contact_matrix = np.zeros((len(protein1.residues), len(protein2.residues)))
-    
-    # Optimization: rough screening before distance calculation
-    p1_com = protein1.center_of_mass()
-    p2_com = protein2.center_of_mass()
-    
-    # COM distance calculation with PBC correction
-    diff = p1_com - p2_com
-    for dim in range(3):
-        if diff[dim] > box[dim] * 0.5:
-            diff[dim] -= box[dim]
-        elif diff[dim] < -box[dim] * 0.5:
-            diff[dim] += box[dim]
-    
-    com_dist = np.sqrt(np.sum(diff * diff))
-
-    # Skip calculation if COMs are too far apart
-    if com_dist > 30.0:  # If farther than 30Å, assume no contact
-        print(f"Proteins too far apart: {com_dist:.2f}Å > 30Å, skipping contact calculation")
-
-        # Store residue IDs (optionally converted)
-        if APPLY_RESIDUE_OFFSET:
-            residue_ids1 = [res.resid + RESIDUE_OFFSET for res in protein1.residues]
-            residue_ids2 = [res.resid + RESIDUE_OFFSET for res in protein2.residues]
-        else:
-            residue_ids1 = [res.resid for res in protein1.residues]
-            residue_ids2 = [res.resid for res in protein2.residues]
-
-        return protein1_contacts, protein2_contacts, contact_matrix, min_distances1, min_distances2, residue_ids1, residue_ids2
-    
-    print(f"Calculating protein-protein contacts between {len(protein1.residues)} and {len(protein2.residues)} residues")
-    
-    # Calculate minimum distance between residues
-    for i, res1 in enumerate(protein1.residues):
-        for j, res2 in enumerate(protein2.residues):
-            # Find minimum distance between atoms in residues
-            min_dist = float('inf')
-            
-            # Optimization: use residue COMs for rough screening
-            res1_com = res1.atoms.center_of_mass()
-            res2_com = res2.atoms.center_of_mass()
-            
-            # Residue COM distance calculation with PBC
-            res_diff = res1_com - res2_com
-            for dim in range(3):
-                if res_diff[dim] > box[dim] * 0.5:
-                    res_diff[dim] -= box[dim]
-                elif res_diff[dim] < -box[dim] * 0.5:
-                    res_diff[dim] += box[dim]
-            
-            res_com_dist = np.sqrt(np.sum(res_diff * res_diff))
-            
-            # Skip if residue COMs are too far apart
-            max_atom_dist = 10.0  # Estimated maximum distance between atoms in residue
-            if res_com_dist > (cutoff + max_atom_dist):
-                continue
-            
-            for atom1 in res1.atoms:
-                for atom2 in res2.atoms:
-                    # Distance calculation with PBC correction
-                    diff = atom1.position - atom2.position
-                    for dim in range(3):
-                        if diff[dim] > box[dim] * 0.5:
-                            diff[dim] -= box[dim]
-                        elif diff[dim] < -box[dim] * 0.5:
-                            diff[dim] += box[dim]
-                    
-                    dist = np.sqrt(np.sum(diff * diff))
-                    min_dist = min(min_dist, dist)
-                    
-                    # Early termination if distance below cutoff found
-                    if min_dist <= cutoff:
-                        break
-                
-                if min_dist <= cutoff:
-                    break
-            
-            # Save minimum distance
-            min_distances1[i] = min(min_distances1[i], min_dist)
-            min_distances2[j] = min(min_distances2[j], min_dist)
-                
-            # Record contact as binary (0/1) if within cutoff
-            if min_dist <= cutoff:
-                protein1_contacts[i] += 1.0
-                protein2_contacts[j] += 1.0
-                contact_matrix[i, j] = 1.0
-
-    # Store residue IDs (optionally converted)
+    R = _residue_min_distance(protein1, protein2, box)
+    contact_matrix = (R <= cutoff).astype(float)
+    protein1_contacts = contact_matrix.sum(1)
+    protein2_contacts = contact_matrix.sum(0)
+    min_distances1 = R.min(1)
+    min_distances2 = R.min(0)
     if APPLY_RESIDUE_OFFSET:
         residue_ids1 = [res.resid + RESIDUE_OFFSET for res in protein1.residues]
         residue_ids2 = [res.resid + RESIDUE_OFFSET for res in protein2.residues]
     else:
         residue_ids1 = [res.resid for res in protein1.residues]
         residue_ids2 = [res.resid for res in protein2.residues]
-
     return protein1_contacts, protein2_contacts, contact_matrix, min_distances1, min_distances2, residue_ids1, residue_ids2
 
 def calculate_lipid_protein_contacts(protein, lipid_sels, box, cutoff=CONTACT_CUTOFF):
-    """Calculate residue-lipid contacts between protein and each lipid type (3D distance)
-    
-    Parameters
-    ----------
-    protein : MDAnalysis.AtomGroup
-        Protein selection
-    lipid_sels : dict
-        Dictionary of lipid selections by type
-    box : array-like
-        Box dimensions for PBC
-    cutoff : float
-        Contact cutoff distance in Angstrom
-        
-    Returns
-    -------
-    dict
-        Contact information for each lipid type
-    """
-    # Initialize results
-    lipid_contacts = {}
-    for lipid_type in lipid_sels:
-        lipid_contacts[lipid_type] = np.zeros(len(protein.residues))
-    
-    # Loop through each residue
-    for i, res in enumerate(protein.residues):
-        # Save original residue ID (for debug output)
-        original_resid = res.resid
-        # Optionally converted residue ID (for result reporting)
-        converted_resid = original_resid + RESIDUE_OFFSET if APPLY_RESIDUE_OFFSET else original_resid
-        
-        # Calculate average Z coordinate (height) of residue
-        res_z_avg = np.mean([atom.position[2] for atom in res.atoms])
-        
-        # Loop through each lipid type
-        for lipid_type, sel_info in lipid_sels.items():
-            # Process only upper leaflet
-            leaflet_sel = sel_info['sel'][0]
-            if len(leaflet_sel) == 0:
-                continue
-            
-            # Calculate average Z coordinate of leaflet (for optimization)
-            leaflet_z_avg = np.mean([atom.position[2] for atom in leaflet_sel.atoms])
-            
-            # Skip if Z distance is too large (important optimization)
-            z_diff = abs(res_z_avg - leaflet_z_avg)
-            if z_diff > 15.0:  # Skip if separated by more than 15Å
-                continue
-            
-            # Loop through each lipid residue
-            lipid_count = 0
-            for lipid_res in leaflet_sel.residues:
-                # Calculate minimum distance between residue and lipid residue
-                min_dist = float('inf')
-                
-                # Optimization: first check residue COM distance
-                res_com = res.atoms.center_of_mass()
-                lipid_com = lipid_res.atoms.center_of_mass()
-                
-                # COM distance calculation with PBC correction
-                com_diff = res_com - lipid_com
-                for dim in range(3):
-                    if com_diff[dim] > box[dim] * 0.5:
-                        com_diff[dim] -= box[dim]
-                    elif com_diff[dim] < -box[dim] * 0.5:
-                        com_diff[dim] += box[dim]
-                
-                com_dist = np.sqrt(np.sum(com_diff * com_diff))
-                
-                # Skip if COMs are too far apart (important optimization)
-                max_atom_dist = 8.0  # Estimated maximum distance between atoms in residue
-                if com_dist > (cutoff + max_atom_dist):
-                    continue
-                
-                for atom in res.atoms:
-                    for lipid_atom in lipid_res.atoms:
-                        # 3D distance calculation with PBC correction
-                        diff = atom.position - lipid_atom.position
-                        for dim in range(3):  # Calculate for all dimensions (XYZ)
-                            if diff[dim] > box[dim] * 0.5:
-                                diff[dim] -= box[dim]
-                            elif diff[dim] < -box[dim] * 0.5:
-                                diff[dim] += box[dim]
-                        
-                        # 3D distance calculation
-                        dist = np.sqrt(np.sum(diff * diff))
-                        min_dist = min(min_dist, dist)
-                        
-                        # Early termination if distance below cutoff found
-                        if min_dist <= cutoff:
-                            break
-                    
-                    if min_dist <= cutoff:
-                        break
-                
-                # Count as contact if within cutoff (binary method)
-                if min_dist <= cutoff:
-                    lipid_contacts[lipid_type][i] += 1
-                    lipid_count += 1
-    
-    # Return results including residue IDs and contact information
-    result = {}
-    for lipid_type in lipid_sels:
-        # Create list of residue IDs (optionally converted)
-        if APPLY_RESIDUE_OFFSET:
-            residue_ids = [res.resid + RESIDUE_OFFSET for res in protein.residues]
-        else:
-            residue_ids = [res.resid for res in protein.residues]
-        result[lipid_type] = {
-            'contacts': lipid_contacts[lipid_type],
-            'residue_ids': residue_ids
-        }
+    """Residue-lipid contacts between a protein and each lipid type (3D, minimum image).
 
-    return result
+    For every protein residue and lipid type, the count is the number of lipid molecules
+    of that type in the upper leaflet with any bead within `cutoff` of any bead of the
+    residue. Every bead of every lipid molecule is evaluated. The z prescreen and the
+    COM prescreen of the earlier version are removed: both dropped lipids that were in
+    contact (molecules split across the periodic boundary, and lipid tails next to
+    residues in the bilayer core).
+    """
+    lipid_contacts = {}
+    n_res = len(protein.residues)
+    for lipid_type, sel_info in lipid_sels.items():
+        leaflet_sel = sel_info['sel'][0]
+        counts = np.zeros(n_res)
+        if len(leaflet_sel) > 0:
+            lip_atoms = leaflet_sel.residues.atoms
+            R = _residue_min_distance(protein, lip_atoms, box)
+            counts = (R <= cutoff).sum(1).astype(float)
+        lipid_contacts[lipid_type] = counts
+    if APPLY_RESIDUE_OFFSET:
+        residue_ids = [res.resid + RESIDUE_OFFSET for res in protein.residues]
+    else:
+        residue_ids = [res.resid for res in protein.residues]
+    return {lt: {'contacts': lipid_contacts[lt], 'residue_ids': residue_ids} for lt in lipid_sels}
 
 def calculate_unique_lipid_protein_contacts(protein, lipid_sels, box, cutoff=CONTACT_CUTOFF):
-    """Calculate unique lipid molecule counts in contact with protein (no double counting)
-    
-    Parameters
-    ----------
-    protein : MDAnalysis.AtomGroup
-        Protein selection
-    lipid_sels : dict
-        Dictionary of lipid selections by type
-    box : array-like
-        Box dimensions for PBC
-    cutoff : float
-        Contact cutoff distance in Angstrom
-        
-    Returns
-    -------
-    dict
-        Unique lipid molecule counts for each lipid type
-    """
+    """Number of distinct lipid molecules of each type with any bead within `cutoff` of any
+    bead of the protein selection (minimum image). The 10 A in-plane COM prescreen of the
+    earlier version, which dropped molecules in contact, is removed."""
     unique_contacts = {}
-    
-    # Pre-calculate protein COM and positions for optimization
-    protein_com = protein.center_of_mass()
-    protein_positions = np.array([atom.position for atom in protein.atoms])
-    
-    # Loop through each lipid type
     for lipid_type, sel_info in lipid_sels.items():
-        # Process only upper leaflet
         leaflet_sel = sel_info['sel'][0]
         if len(leaflet_sel) == 0:
             unique_contacts[lipid_type] = 0
             continue
-        
-        # Set to store unique lipid molecules in contact
-        contacted_lipids = set()
-        
-        # Group lipids by molecule (residue)
-        lipid_residues = leaflet_sel.residues
-        
-        # Remove overly aggressive Z-coordinate filtering that was causing issues
-        # Will rely on COM distance filtering instead
-        
-        # Check each lipid molecule with optimization
-        for lipid_res in lipid_residues:
-            # Optimization: first check XY-plane distance only
-            lipid_com = lipid_res.atoms.center_of_mass()
-            
-            # XY-plane distance calculation with PBC correction
-            xy_diff = lipid_com[:2] - protein_com[:2]  # Only X and Y components
-            xy_diff = xy_diff - box[:2] * np.round(xy_diff / box[:2])  # PBC in XY
-            xy_dist = np.sqrt(np.sum(xy_diff * xy_diff))
-            
-            # Skip if XY distance is too large (10Å cutoff for XY plane)
-            if xy_dist > 10.0:
-                continue
-            
-            # Fully vectorized distance calculation for all atom pairs
-            lipid_positions = np.array([atom.position for atom in lipid_res.atoms])
-            
-            # Calculate all pairwise distances at once
-            # Shape: (n_lipid_atoms, n_protein_atoms, 3)
-            diff = lipid_positions[:, np.newaxis, :] - protein_positions[np.newaxis, :, :]
-            diff = diff - box * np.round(diff / box)
-            
-            # Calculate distances: shape (n_lipid_atoms, n_protein_atoms)
-            distances = np.sqrt(np.sum(diff * diff, axis=2))
-            
-            # Check if any distance is within cutoff
-            if np.any(distances <= cutoff):
-                contacted_lipids.add(lipid_res.resid)
-        
-        unique_contacts[lipid_type] = len(contacted_lipids)
-    
+        lip_atoms = leaflet_sel.residues.atoms
+        D = _distance_array(protein.positions, lip_atoms.positions, box=_full_box(box))
+        hit = (D <= cutoff).any(0)
+        unique_contacts[lipid_type] = int(len(np.unique(lip_atoms.resindices[hit])))
     return unique_contacts
 
 def check_tm_helix_interactions(protein1, protein2, box, protein_cutoff=6.0):
@@ -387,12 +185,12 @@ def calculate_protein_com_distances(universe, proteins):
             if TM_HELIX_RESID_RANGE:
                 tm_region = protein.select_atoms(f"resid {TM_HELIX_RESID_RANGE}")
                 if len(tm_region) > 0:
-                    protein_coms[protein_name] = tm_region.center_of_mass()
+                    protein_coms[protein_name] = _whole_com(tm_region, box)
                 else:
                     # Fallback to full protein if TM region not found
-                    protein_coms[protein_name] = protein.center_of_mass()
+                    protein_coms[protein_name] = _whole_com(protein, box)
             else:
-                protein_coms[protein_name] = protein.center_of_mass()
+                protein_coms[protein_name] = _whole_com(protein, box)
     
     # Identify close protein pairs
     close_pairs = {}

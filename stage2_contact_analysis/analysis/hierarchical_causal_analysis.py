@@ -4,7 +4,7 @@ Hierarchical Bayesian Causal Analysis for Stage 2 Lipid Contacts
 This module implements hierarchical Bayesian models to assess population-level
 causal effects across multiple protein copies.
 
-Author: Takeshi Sato, PhD (with Claude Code)
+Author: Takeshi Sato, PhD
 Kyoto Pharmaceutical University
 2024
 """

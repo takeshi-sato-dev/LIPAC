@@ -8,7 +8,7 @@ to assess population-level effects of target lipid binding on lipid contacts.
 Usage:
     python run_stage2_hierarchical.py
 
-Author: Takeshi Sato, PhD (with Claude Code)
+Author: Takeshi Sato, PhD
 Kyoto Pharmaceutical University
 2024
 """

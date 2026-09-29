@@ -8,7 +8,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="lipac",
-    version="1.0.0",
+    version="3.0.0",
     author="Takeshi Sato",
     author_email="takeshi.sato@mb.kyoto-phu.ac.jp",
     description="Lipid-Protein Analysis with Causal Inference for MD simulations",

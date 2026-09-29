@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="lipid-protein-analyzer",
-    version="1.0.0",
+    version="3.0.0",
     author="Your Name",
     author_email="your.email@example.com",
     description="A comprehensive tool for analyzing lipid-protein interactions from MD simulations",
