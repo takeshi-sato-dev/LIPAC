@@ -50,7 +50,6 @@ time within each copy (at least 100 shifts; 200 by default). A lipid type is cla
 as linear or cooperative only when it passes these tests, and the uncalibrated rule
 (delta WAIC > 2) of the Bayesian models should not be used on its own.
 
-This repository is no longer developed.
 
 
 LIPAC is a Python package for comprehensive analysis of lipid-protein interactions from molecular dynamics simulations with integrated causal inference capabilities.
